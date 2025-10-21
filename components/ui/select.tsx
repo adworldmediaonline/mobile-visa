@@ -107,6 +107,7 @@ export const Select: React.FC<SelectProps> = ({
         onClose={() => setIsModalVisible(false)}
         title={label || 'Select an option'}
         height="60%"
+        scrollable={false}
       >
         <FlatList
           data={options}

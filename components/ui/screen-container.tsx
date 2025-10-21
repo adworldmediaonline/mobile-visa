@@ -1,13 +1,8 @@
 import { cn } from '@/lib/utils';
 import { router } from 'expo-router';
 import React from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { ProgressBar } from './progress-bar';
 
 interface ScreenContainerProps {
@@ -48,7 +43,7 @@ export const ScreenContainer: React.FC<ScreenContainerProps> = ({
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-secondary-50">
+    <SafeAreaView className="flex-1 bg-secondary-50" edges={['top', 'left', 'right']}>
       {/* Header */}
       <View className="bg-white px-6 py-4 border-b border-secondary-100">
         <View className="flex-row items-center justify-between mb-4">

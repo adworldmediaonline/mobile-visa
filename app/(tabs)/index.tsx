@@ -4,7 +4,8 @@ import { ProgressBar } from '@/components/ui/progress-bar';
 import { useVisaApplicationStore } from '@/store/visa-application-store';
 import { router } from 'expo-router';
 import React from 'react';
-import { Dimensions, SafeAreaView, ScrollView, Text, View } from 'react-native';
+import { Dimensions, ScrollView, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const { width: screenWidth } = Dimensions.get('window');
 

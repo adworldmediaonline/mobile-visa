@@ -1,14 +1,13 @@
+import { BlurView } from 'expo-blur';
 import React from 'react';
 import {
-  Modal,
-  View,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-  Dimensions,
+    Dimensions,
+    Modal,
+    ScrollView,
+    Text,
+    TouchableOpacity,
+    View,
 } from 'react-native';
-import { BlurView } from 'expo-blur';
-import { cn } from '@/lib/utils';
 
 interface BottomSheetModalProps {
   visible: boolean;
@@ -16,6 +15,7 @@ interface BottomSheetModalProps {
   title?: string;
   children: React.ReactNode;
   height?: number | string;
+  scrollable?: boolean;
 }
 
 const { height: screenHeight } = Dimensions.get('window');
@@ -26,8 +26,9 @@ export const BottomSheetModal: React.FC<BottomSheetModalProps> = ({
   title,
   children,
   height = '50%',
+  scrollable = true,
 }) => {
-  const modalHeight = typeof height === 'string' 
+  const modalHeight = typeof height === 'string'
     ? screenHeight * (parseInt(height) / 100)
     : height;
 
@@ -39,15 +40,15 @@ export const BottomSheetModal: React.FC<BottomSheetModalProps> = ({
       onRequestClose={onClose}
     >
       <View className="flex-1">
-        <TouchableOpacity 
+        <TouchableOpacity
           className="flex-1"
           activeOpacity={1}
           onPress={onClose}
         >
           <BlurView intensity={20} className="flex-1 bg-black/20" />
         </TouchableOpacity>
-        
-        <View 
+
+        <View
           className="bg-white rounded-t-3xl"
           style={{ height: modalHeight }}
         >
@@ -56,7 +57,7 @@ export const BottomSheetModal: React.FC<BottomSheetModalProps> = ({
               <Text className="text-xl font-bold text-secondary-900">
                 {title}
               </Text>
-              <TouchableOpacity 
+              <TouchableOpacity
                 onPress={onClose}
                 className="w-8 h-8 items-center justify-center"
               >
@@ -64,13 +65,19 @@ export const BottomSheetModal: React.FC<BottomSheetModalProps> = ({
               </TouchableOpacity>
             </View>
           )}
-          
-          <ScrollView 
-            className="flex-1 px-6"
-            showsVerticalScrollIndicator={false}
-          >
-            {children}
-          </ScrollView>
+
+          {scrollable ? (
+            <ScrollView
+              className="flex-1 px-6"
+              showsVerticalScrollIndicator={false}
+            >
+              {children}
+            </ScrollView>
+          ) : (
+            <View className="flex-1">
+              {children}
+            </View>
+          )}
         </View>
       </View>
     </Modal>

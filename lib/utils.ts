@@ -1,4 +1,5 @@
 import { type ClassValue, clsx } from 'clsx';
+import dayjs from 'dayjs';
 
 export function cn(...inputs: ClassValue[]) {
   return clsx(inputs);
@@ -13,12 +14,8 @@ export function formatCurrency(amount: number, currency: string = 'INR'): string
 }
 
 export function formatDate(date: Date | string): string {
-  const dateObj = typeof date === 'string' ? new Date(date) : date;
-  return dateObj.toLocaleDateString('en-IN', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
+  // Use dayjs for consistent date formatting
+  return dayjs(date).format('MMMM D, YYYY');
 }
 
 export function generateId(): string {

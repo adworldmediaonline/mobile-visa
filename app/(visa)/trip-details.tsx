@@ -1,22 +1,19 @@
 import { Button } from '@/components/ui/button';
+import { DatePicker } from '@/components/ui/date-picker';
 import { Form } from '@/components/ui/form';
 import { ScreenContainer } from '@/components/ui/screen-container';
-import { formatDate } from '@/lib/utils';
 import {
-  TripDetailsFormData,
-  enhancedTripDetailsSchema,
+    TripDetailsFormData,
+    enhancedTripDetailsSchema,
 } from '@/lib/validations';
 import { useVisaApplicationStore } from '@/store/visa-application-store';
 import { zodResolver } from '@hookform/resolvers/zod';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import { router } from 'expo-router';
-import React, { useState } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { View } from 'react-native';
 
 export default function TripDetailsScreen() {
-  const [showDatePicker, setShowDatePicker] = useState(false);
-
   const {
     tripDetails,
     selectedVisaType,
@@ -33,15 +30,16 @@ export default function TripDetailsScreen() {
     },
   });
 
-  const selectedDate = form.watch('arrivalDate');
+  const arrivalDate = form.watch('arrivalDate');
 
-  const handleDateChange = (event: any, selectedDate?: Date) => {
-    setShowDatePicker(false);
-    if (selectedDate) {
-      const dateString = selectedDate.toISOString().split('T')[0];
-      form.setValue('arrivalDate', dateString);
-      form.trigger('arrivalDate');
-    }
+  const handleDateChange = (dateString: string) => {
+    console.log('TripDetails - handleDateChange called with:', dateString);
+    console.log('TripDetails - Current form value before:', form.getValues('arrivalDate'));
+
+    form.setValue('arrivalDate', dateString, { shouldValidate: true, shouldDirty: true });
+
+    console.log('TripDetails - Current form value after:', form.getValues('arrivalDate'));
+    console.log('TripDetails - Form errors:', form.formState.errors);
   };
 
   const onSubmit = (data: TripDetailsFormData) => {
@@ -74,42 +72,15 @@ export default function TripDetailsScreen() {
       onSaveExit={handleSaveExit}
     >
       <Form>
-        <View>
-          <Text className="text-secondary-700 text-sm font-medium mb-2">
-            Arrival date
-            <Text className="text-danger-500 ml-1">*</Text>
-          </Text>
-
-          <TouchableOpacity
-            onPress={() => setShowDatePicker(true)}
-            className="flex-row items-center bg-white border-2 border-secondary-200 rounded-xl px-4 py-3"
-          >
-            <Text
-              className={`flex-1 text-base ${
-                selectedDate ? 'text-secondary-900' : 'text-secondary-400'
-              }`}
-            >
-              {selectedDate ? formatDate(selectedDate) : 'Select date'}
-            </Text>
-            <Text className="text-secondary-400 text-xl">📅</Text>
-          </TouchableOpacity>
-
-          {form.formState.errors.arrivalDate && (
-            <Text className="text-danger-500 text-sm mt-1">
-              {form.formState.errors.arrivalDate.message}
-            </Text>
-          )}
-        </View>
-
-        {showDatePicker && (
-          <DateTimePicker
-            value={selectedDate ? new Date(selectedDate) : new Date()}
-            mode="date"
-            display="default"
-            minimumDate={new Date()}
-            onChange={handleDateChange}
-          />
-        )}
+        <DatePicker
+          value={arrivalDate}
+          onChange={handleDateChange}
+          label="Arrival date"
+          placeholder="Select arrival date"
+          required
+          minimumDate={new Date()}
+          error={form.formState.errors.arrivalDate?.message}
+        />
       </Form>
 
       <View className="mt-8">

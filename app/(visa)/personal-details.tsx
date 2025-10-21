@@ -1,9 +1,10 @@
 import { Button } from '@/components/ui/button';
+import { DatePicker } from '@/components/ui/date-picker';
 import { Form, FormField } from '@/components/ui/form';
 import { ScreenContainer } from '@/components/ui/screen-container';
 import {
-  PersonalDetailsFormData,
-  enhancedPersonalDetailsSchema,
+    PersonalDetailsFormData,
+    enhancedPersonalDetailsSchema,
 } from '@/lib/validations';
 import { useVisaApplicationStore } from '@/store/visa-application-store';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -31,6 +32,18 @@ export default function PersonalDetailsScreen() {
       dateOfBirth: personalDetails?.dateOfBirth || '',
     },
   });
+
+  const dateOfBirth = form.watch('dateOfBirth');
+
+  const handleDateChange = (dateString: string) => {
+    console.log('PersonalDetails - handleDateChange called with:', dateString);
+    console.log('PersonalDetails - Current form value before:', form.getValues('dateOfBirth'));
+
+    form.setValue('dateOfBirth', dateString, { shouldValidate: true, shouldDirty: true });
+
+    console.log('PersonalDetails - Current form value after:', form.getValues('dateOfBirth'));
+    console.log('PersonalDetails - Form errors:', form.formState.errors);
+  };
 
   const onSubmit = (data: PersonalDetailsFormData) => {
     setPersonalDetails(data);
@@ -75,13 +88,15 @@ export default function PersonalDetailsScreen() {
           autoCapitalize="words"
         />
 
-        <FormField
-          control={form.control}
-          name="dateOfBirth"
+        <DatePicker
+          value={dateOfBirth}
+          onChange={handleDateChange}
           label="Date of birth"
-          placeholder="YYYY-MM-DD"
+          placeholder="Select your date of birth"
           required
-          rightIcon={<Text className="text-secondary-400 text-xl">📅</Text>}
+          maximumDate={new Date()}
+          minimumDate={new Date(new Date().getFullYear() - 100, 0, 1)}
+          error={form.formState.errors.dateOfBirth?.message}
         />
       </Form>
 

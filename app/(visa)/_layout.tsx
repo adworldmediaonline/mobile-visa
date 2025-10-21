@@ -13,13 +13,6 @@ export default function VisaLayout() {
       <Stack.Screen name="trip-details" />
       <Stack.Screen name="passport-upload" />
       <Stack.Screen name="personal-details" />
-      <Stack.Screen name="residency-details" />
-      <Stack.Screen name="passport-details" />
-      <Stack.Screen name="travelers" />
-      <Stack.Screen name="processing-options" />
-      <Stack.Screen name="order-review" />
-      <Stack.Screen name="payment" />
-      <Stack.Screen name="confirmation" />
     </Stack>
   );
 }
